@@ -1,0 +1,18 @@
+debug: true
+filter: "evt.Parsed.program startsWith 'traefik'"
+onsuccess: next_stage
+pattern_syntax:
+  TRAEFIK_ROUTER: '%{USER}@%{URIHOST}'
+  # for json just use TIMESTAMP_ISO8601
+name: crowdsecurity/traefik-logs
+description: "Parse Traefik access logs"
+#
+grok:
+  pattern: '%{NGINXACCESS} %{NUMBER:number_of_requests_received_since_traefik_started} "(%{TRAEFIK_ROUTER:traefik_router_name}|\-)" "(%{URI:traefik_server_url}|\-)" %{NUMBER:request_duration_in_ms}ms'
+  apply_on: message
+# statics:
+#   - meta: log_type
+#     value: http_access-log
+#   - parsed: is_my_service
+#     value: yes
+
